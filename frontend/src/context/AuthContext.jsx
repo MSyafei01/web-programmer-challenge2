@@ -1,7 +1,7 @@
     import React, { createContext, useContext, useState, useEffect } from 'react';
     import axios from 'axios';
 
-    const AuthContext = createContext();
+const AuthContext = createContext();
 
     export const useAuth = () => {
     const context = useContext(AuthContext);
@@ -16,34 +16,40 @@
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Configure axios
-    axios.defaults.withCredentials = true;
-
     useEffect(() => {
         checkAuth();
     }, []);
 
     const checkAuth = async () => {
         try {
-        // Untuk sementara, kita simulasikan dulu
-        // Nanti akan diganti dengan API call ke backend
         const token = localStorage.getItem('auth_token');
-        if (token) {
+        const userData = localStorage.getItem('user_data');
+        
+        console.log('checkAuth - Token exists:', !!token, 'User data exists:', !!userData);
+        
+        if (token && userData) {
             setIsAuthenticated(true);
-            setUser({ username: 'admin', email: 'admin@javisteknologi.com' });
+            setUser(JSON.parse(userData));
+            console.log('checkAuth - User authenticated:', JSON.parse(userData));
+        } else {
+            console.log('checkAuth - No auth data found');
         }
         } catch (error) {
         console.error('Auth check failed:', error);
         } finally {
         setLoading(false);
+        console.log('checkAuth - Loading set to false');
         }
     };
 
     const login = async (email, password) => {
         try {
         setLoading(true);
+        console.log('login - Starting login for:', email);
         
-        // SIMULASI LOGIN - nanti diganti dengan API call
+        // Simulasi API call delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         if ((email === 'admin@javisteknologi.com' || email === 'admin') && password === 'admin123') {
             const userData = {
             id: 1,
@@ -52,25 +58,35 @@
             role: 'administrator'
             };
             
-            localStorage.setItem('auth_token', 'simulated_token');
+            // Simpan ke localStorage
+            localStorage.setItem('auth_token', 'simulated_jwt_token_12345');
+            localStorage.setItem('user_data', JSON.stringify(userData));
+            
+            // Update state - INI YANG PENTING!
             setIsAuthenticated(true);
             setUser(userData);
             
+            console.log('login - SUCCESS, user authenticated:', userData);
             return { success: true, data: userData };
         } else {
-            return { success: false, error: 'Invalid credentials' };
+            console.log('login - FAILED: Invalid credentials');
+            return { success: false, error: 'Invalid email/username or password' };
         }
         } catch (error) {
-        return { success: false, error: 'Login failed' };
+        console.error('login - ERROR:', error);
+        return { success: false, error: 'Login failed. Please try again.' };
         } finally {
         setLoading(false);
+        console.log('login - Loading set to false');
         }
     };
 
     const logout = async () => {
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('user_data');
         setIsAuthenticated(false);
         setUser(null);
+        console.log('logout - User logged out');
     };
 
     const value = {
