@@ -51,10 +51,13 @@ router.use(loginRateLimit());
 
         // Check if account is locked due to too many attempts
         if (user.login_attempts >= 5) {
-        return res.status(423).json({
-            error: 'Account temporarily locked due to too many failed attempts'
-        });
-        }
+        // Hitung waktu tersisa untuk unlock
+        const [lastAttempt] = await db.execute(
+            'SELECT updated_at FROM users WHERE id = ?',
+            [user.id]
+        );
+
+
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
