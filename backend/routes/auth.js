@@ -32,3 +32,27 @@ router.use(loginRateLimit());
             error: 'Password must be at least 6 characters' 
         });
         }
+    const db = getDB();
+
+        // Find user by email or username
+        const [users] = await db.execute(
+        `SELECT * FROM users 
+        WHERE (email = ? OR username = ?) AND is_active = TRUE`,
+        [email, email]
+        );
+
+        if (users.length === 0) {
+        return res.status(401).json({ 
+            error: 'Invalid email/username or password' 
+        });
+        }
+
+        const user = users[0];
+
+        // Check if account is locked due to too many attempts
+        if (user.login_attempts >= 5) {
+        return res.status(423).json({
+            error: 'Account temporarily locked due to too many failed attempts'
+        });
+        }
+
