@@ -5,8 +5,7 @@
     
     import ParticlesBackground from '../components/ParticlesBackground';
 
-// Di dalam component Login, tambahkan setelah background elements:
-<ParticlesBackground /> 
+
 
     const Login = () => {
     return (
@@ -17,6 +16,9 @@
         {/* Animated Background Elements */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-400/10 rounded-full blur-3xl animate-pulse-slow"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+
+        
+        <ParticlesBackground /> 
         
         {/* Theme Toggle */}
         <div className="absolute top-6 right-6 z-10">
