@@ -1,0 +1,44 @@
+web-programmer-challenge2/
+├── backend/                    # Folder backend (Railway)
+│   ├── config/
+│   │   └── database.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   └── rateLimit.js
+│   ├── routes/
+│   │   ├── auth.js
+│   │   └── dashboard.js
+│   ├── utils/
+│   │   └── helpers.js
+│   ├── .env
+│   ├── package.json
+│   └── server.js
+├── frontend/                   # Folder frontend (Railway)
+│   ├── public/
+│   │   └── vite.svg
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── LoginForm.jsx
+│   │   │   ├── LoadingSpinner.jsx
+│   │   │   ├── ThemeToggle.jsx
+│   │   │   ├── Notification.jsx
+│   │   │   └──ParticlesBackground.jsx
+│   │   ├── pages/
+│   │   │   ├── Login.jsx
+│   │   │   └── Dashboard.jsx
+│   │   ├── hooks/
+│   │   │   └── useAuth.js
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
+│   │   ├── styles/
+│   │   │   └── index.css
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .env
+│   ├── index.html
+│   ├── package.json
+│   ├── tailwind.config.js
+│   ├── vite.config.js
+│   ├── package-lock.json
+│   └── postcss.config.js
+└── README.md
