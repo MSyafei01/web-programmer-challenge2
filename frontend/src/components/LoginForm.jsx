@@ -63,6 +63,46 @@
         }
     };
 
+    const PasswordStrength = ({ password }) => {
+    const getStrength = (pass) => {
+        if (pass.length === 0) return 0;
+        if (pass.length < 6) return 1;
+        if (pass.length < 8) return 2;
+        if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(pass)) return 3;
+        return 4;
+    };
+
+    const strength = getStrength(password);
+    const labels = ['', 'Very Weak', 'Weak', 'Good', 'Strong'];
+    const colors = ['', 'bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-500'];
+
+    if (password.length === 0) return null;
+
+    return (
+        <div className="mt-2">
+        <div className="flex space-x-1 mb-1">
+            {[1, 2, 3, 4].map((level) => (
+            <div
+                key={level}
+                className={`h-1 flex-1 rounded-full transition-all ${
+                level <= strength ? colors[strength] : 'bg-gray-300'
+                }`}
+            />
+            ))}
+        </div>
+        <p className={`text-xs ${
+            strength === 1 ? 'text-red-500' :
+            strength === 2 ? 'text-orange-500' :
+            strength === 3 ? 'text-yellow-500' :
+            strength === 4 ? 'text-green-500' : 'text-gray-500'
+        }`}>
+            Password strength: {labels[strength]}
+        </p>
+        </div>
+    );
+    };
+
+
     return (
         <div className="w-full max-w-md">
         <div className="glass-effect rounded-2xl p-8 cyber-glow">
