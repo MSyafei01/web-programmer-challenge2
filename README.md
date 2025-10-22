@@ -36,14 +36,6 @@ https://./screenshots/password-strength.jpg
 🛡️ Protected Dashboard
 https://./screenshots/dashboard.jpg
 
-</div><div align="center">
-https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react
-https://img.shields.io/badge/Node.js-18+-339933?logo=node.js
-https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql
-https://img.shields.io/badge/TailwindCSS-3.3.0-06B6D4?logo=tailwindcss
-https://img.shields.io/badge/Vite-4.5.0-646CFF?logo=vite
-
-
 <div align="center">
 
 ![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react)
