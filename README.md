@@ -22,7 +22,8 @@
 📸 Application Screenshots
 <div align="center">
 🎨 Login Page - Light Mode
-(https://./screenshots/login-light.jpg)
+
+![LoginPage] (https://./screenshots/login-light.jpg)
 
 🌙 Mobile Dashboard Page - Dark Mode
 (https://./screenshots/login-dark.jpg)
