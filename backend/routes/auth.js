@@ -95,3 +95,48 @@ router.use(loginRateLimit());
         sameSite: 'strict',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
         });
+        
+        // Return user data (without password)
+        const userResponse = {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.role,
+        lastLogin: user.last_login
+        };
+
+        res.json({
+        success: true,
+        message: 'Login successful',
+        user: userResponse
+        });
+
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ 
+        error: 'Internal server error during login' 
+        });
+    }
+    });
+
+    // Logout endpoint
+    router.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ 
+        success: true, 
+        message: 'Logout successful' 
+    });
+    });
+
+    // Verify token endpoint
+    router.get('/verify', async (req, res) => {
+    try {
+        const token = req.cookies.token;
+
+        if (!token) {
+        return res.json({ 
+            authenticated: false 
+        });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
