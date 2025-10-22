@@ -1,6 +1,23 @@
 # 🚀 Web Programmer Challenge - Authentication System
 
+## 🌐 Live Demo
 
+### Frontend (Production)
+🔗 **Live Application:** [web-programmer-challenge2.netlify.app](https://web-programmer-challenge2.netlify.app)
+
+### Demo Credentials
+- **Email:** `admin@javisteknologi.com`
+- **Username:** `admin`
+- **Password:** `admin123`
+
+### Features Available in Demo
+- ✅ Complete login authentication
+- ✅ Responsive design (mobile & desktop)
+- ✅ Dark/Light mode toggle
+- ✅ Password strength meter
+- ✅ Rate limiting with countdown
+- ✅ Protected dashboard
+- ✅ Real-time form validation
 
 
 
