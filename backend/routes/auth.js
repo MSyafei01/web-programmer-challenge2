@@ -56,11 +56,30 @@ router.use(loginRateLimit());
             'SELECT updated_at FROM users WHERE id = ?',
             [user.id]
         );
+        
+        const lastAttemptTime = new Date(lastAttempt[0].updated_at).getTime();
+        const now = Date.now();
+        const timeElapsed = now - lastAttemptTime;
+        const timeRemaining = Math.ceil((60000 - timeElapsed) / 1000); // 1 menit dalam ms
+        
+        if (timeRemaining > 0) {
+            return res.status(429).json({
+            error: 'Account temporarily locked.',
+            retryAfter: timeRemaining,
+            message: `Too many failed attempts. Try again in ${timeRemaining} seconds.`
+            });
+        } else {
+            // Reset attempts jika waktu sudah habis
+            await db.execute(
+            'UPDATE users SET login_attempts = 0 WHERE id = ?',
+            [user.id]
+            );
         }
-
+        }
         
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
 
         if (!isPasswordValid) {
         // Increment login attempts
@@ -127,8 +146,8 @@ router.use(loginRateLimit());
     router.post('/logout', (req, res) => {
     res.clearCookie('token');
     res.json({ 
-        success: true, 
-        message: 'Logout successful' 
+    success: true, 
+    message: 'Logout successful' 
     });
     });
 
