@@ -37,10 +37,10 @@
     }
     };
 
-    // Rate limiting middleware for login attempts
+    // Rate limiting middleware for login attempts - UPDATED to 1 MINUTE
     export const loginRateLimit = () => {
     const attempts = new Map();
-    const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+    const WINDOW_MS = 1 * 60 * 1000; // ⬅️ UBAH: 1 menit (dari 15 menit)
     const MAX_ATTEMPTS = 5;
 
     return (req, res, next) => {
@@ -59,7 +59,7 @@
         // Check if exceeded max attempts
         if (ipAttempts.length >= MAX_ATTEMPTS) {
         return res.status(429).json({
-            error: 'Too many login attempts. Please try again in 15 minutes.'
+            error: 'Too many login attempts. Please try again in 1 minute.' // ⬅️ UPDATE pesan
         });
         }
 
