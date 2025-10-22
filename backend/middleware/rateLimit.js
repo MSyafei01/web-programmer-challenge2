@@ -25,3 +25,8 @@
         next();
     };
     };
+
+// Specific rate limiters
+export const generalRateLimit = createRateLimit(900000, 100, 'Too many requests from this IP');
+export const authRateLimit = createRateLimit(900000, 10, 'Too many authentication attempts');
+export const strictRateLimit = createRateLimit(60000, 5, 'Too many requests, please slow down');
