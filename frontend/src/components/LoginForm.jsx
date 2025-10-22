@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import LoadingSpinner from './LoadingSpinner';
-
+    import React, { useState, useEffect } from 'react';
+    import { useNavigate } from 'react-router-dom';
+    import { useAuth } from '../context/AuthContext';
+    import LoadingSpinner from './LoadingSpinner';
 
     // Password Strength Component
     const PasswordStrength = ({ password }) => {
@@ -44,81 +43,127 @@ import LoadingSpinner from './LoadingSpinner';
     );
     };
 
+    const LoginForm = () => {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+    const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [countdown, setCountdown] = useState(0); // ⬅️ STATE BARU UNTUK COUNTDOWN
+    const { login, loading } = useAuth();
+    const navigate = useNavigate();
 
+    // Countdown timer effect
+    useEffect(() => {
+        let timer;
+        if (countdown > 0) {
+        timer = setInterval(() => {
+            setCountdown(prev => {
+            if (prev <= 1) {
+                clearInterval(timer);
+                return 0;
+            }
+            return prev - 1;
+            });
+        }, 1000);
+        }
+        
+        return () => {
+        if (timer) clearInterval(timer);
+        };
+    }, [countdown]);
 
-        const LoginForm = () => {
-        const [formData, setFormData] = useState({
-            email: '',
-            password: ''
-        });
-        const [showPassword, setShowPassword] = useState(false);
-        const [rememberMe, setRememberMe] = useState(false);
-        const [errors, setErrors] = useState({});
-        const { login, loading } = useAuth();
-        const navigate = useNavigate();
-
-
-        const handleChange = (e) => {
-            const { name, value } = e.target;
-            setFormData(prev => ({
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+        ...prev,
+        [name]: value
+        }));
+        
+        // Clear error when user starts typing
+        if (errors[name]) {
+        setErrors(prev => ({
             ...prev,
-            [name]: value
-            }));
-            
-            if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ''
-            }));
-            }
-        };
+            [name]: ''
+        }));
+        }
+        
+        // Clear general error ketika user mulai mengetik
+        if (errors.general) {
+        setErrors(prev => ({
+            ...prev,
+            general: ''
+        }));
+        }
+    };
 
+    const validateForm = () => {
+        const newErrors = {};
 
-        const validateForm = () => {
-            const newErrors = {};
+        if (!formData.email.trim()) {
+        newErrors.email = 'Email or username is required';
+        }
 
-            if (!formData.email.trim()) {
-            newErrors.email = 'Email or username is required';
-            }
+        if (!formData.password) {
+        newErrors.password = 'Password is required';
+        } else if (formData.password.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters';
+        }
 
-            if (!formData.password) {
-            newErrors.password = 'Password is required';
-            } else if (formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters';
-            }
+        if (formData.email.includes('@') && !/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Please enter a valid email address';
+        }
 
-            if (formData.email.includes('@') && !/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Please enter a valid email address';
-            }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
-            setErrors(newErrors);
-            return Object.keys(newErrors).length === 0;
-        };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log('handleSubmit - Form submitted');
+        
+        if (!validateForm()) {
+        console.log('handleSubmit - Form validation failed');
+        return;
+        }
 
+        // Jika masih dalam countdown, jangan proses login
+        if (countdown > 0) {
+        setErrors({ 
+            general: `Please wait ${countdown} seconds before trying again.` 
+        });
+        return;
+        }
 
-        const handleSubmit = async (e) => {
-            e.preventDefault();
-            console.log('handleSubmit - Form submitted');
-            
-            if (!validateForm()) {
-            console.log('handleSubmit - Form validation failed');
-            return;
-            }
+        const result = await login(formData.email, formData.password);
+        console.log('handleSubmit - Login result:', result);
+        
+        if (result.success) {
+        console.log('handleSubmit - Login successful, navigating to dashboard');
+        navigate('/dashboard');
+        } else {
+        console.log('handleSubmit - Login failed:', result.error);
+        
+        // Jika ada retryAfter dari backend, set countdown
+        if (result.retryAfter) {
+            setCountdown(result.retryAfter);
+        }
+        
+        setErrors({ 
+            general: result.error,
+            isRateLimited: result.isRateLimited 
+        });
+        }
+    };
 
-            const result = await login(formData.email, formData.password);
-            console.log('handleSubmit - Login result:', result);
-            
-            if (result.success) {
-            console.log('handleSubmit - Login successful, navigating to dashboard');
-            // Redirect ke dashboard setelah login berhasil
-            navigate('/dashboard');
-            } else {
-            console.log('handleSubmit - Login failed:', result.error);
-            setErrors({ general: result.error });
-            }
-        };
-
-
+    // Format countdown untuk display
+    const formatCountdown = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
 
     return (
         <div className="w-full max-w-md">
@@ -136,9 +181,55 @@ import LoadingSpinner from './LoadingSpinner';
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Countdown Display */}
+            {countdown > 0 && (
+                <div className="bg-orange-500/20 border border-orange-500/50 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center space-x-2 text-orange-600 dark:text-orange-400">
+                    <span className="text-lg">⏰</span>
+                    <div>
+                    <p className="font-semibold">Too many attempts</p>
+                    <p className="text-sm">Try again in:</p>
+                    <p className="text-xl font-bold countdown-timer">
+                        {formatCountdown(countdown)}
+                    </p>
+                    </div>
+                </div>
+                </div>
+            )}
+
+            {/* Error Messages */}
             {errors.general && (
-                <div className="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                <p className="text-red-700 dark:text-red-300 text-sm font-medium">{errors.general}</p>
+                <div className={`rounded-lg p-4 border ${
+                errors.isRateLimited 
+                    ? 'bg-orange-50 dark:bg-orange-900/50 border-orange-200 dark:border-orange-800' 
+                    : 'bg-red-50 dark:bg-red-900/50 border-red-200 dark:border-red-800'
+                }`}>
+                <div className="flex items-center space-x-2">
+                    <span className={`text-lg ${
+                    errors.isRateLimited ? 'text-orange-500' : 'text-red-500'
+                    }`}>
+                    {errors.isRateLimited ? '⚠️' : '❌'}
+                    </span>
+                    <p className={`text-sm font-medium ${
+                    errors.isRateLimited 
+                        ? 'text-orange-700 dark:text-orange-300' 
+                        : 'text-red-700 dark:text-red-300'
+                    }`}>
+                    {errors.general}
+                    </p>
+                </div>
+                
+                {/* Progress bar untuk countdown */}
+                {errors.isRateLimited && countdown > 0 && (
+                    <div className="mt-2 w-full bg-orange-200 dark:bg-orange-800 rounded-full h-2">
+                    <div 
+                        className="bg-orange-500 h-2 rounded-full transition-all duration-1000 ease-linear"
+                        style={{ 
+                        width: `${(countdown / 60) * 100}%` 
+                        }}
+                    ></div>
+                    </div>
+                )}
                 </div>
             )}
 
@@ -155,9 +246,9 @@ import LoadingSpinner from './LoadingSpinner';
                 onChange={handleChange}
                 className={`w-full px-4 py-3 rounded-xl border bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
                     errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                }`}
+                } ${countdown > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                 placeholder="Enter your email or username"
-                disabled={loading}
+                disabled={loading || countdown > 0}
                 />
                 {errors.email && (
                 <p className="text-red-500 text-sm mt-1 font-medium">{errors.email}</p>
@@ -178,15 +269,15 @@ import LoadingSpinner from './LoadingSpinner';
                     onChange={handleChange}
                     className={`w-full px-4 py-3 pr-12 rounded-xl border bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
                     errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    }`}
+                    } ${countdown > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                     placeholder="Enter your password"
-                    disabled={loading}
+                    disabled={loading || countdown > 0}
                 />
                 <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-                    disabled={loading}
+                    disabled={loading || countdown > 0}
                 >
                     {showPassword ? (
                     <span className="text-lg">👁️</span>
@@ -209,6 +300,7 @@ import LoadingSpinner from './LoadingSpinner';
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500 border-gray-300 dark:border-gray-600"
+                    disabled={countdown > 0}
                 />
                 <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     Remember me
@@ -218,6 +310,7 @@ import LoadingSpinner from './LoadingSpinner';
                 <button
                 type="button"
                 className="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 font-medium"
+                disabled={countdown > 0}
                 >
                 Forgot password?
                 </button>
@@ -226,13 +319,22 @@ import LoadingSpinner from './LoadingSpinner';
             {/* Submit Button */}
             <button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-primary-500 to-cyan-500 hover:from-primary-600 hover:to-cyan-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                disabled={loading || countdown > 0}
+                className={`w-full font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                countdown > 0
+                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed transform-none'
+                    : 'bg-gradient-to-r from-primary-500 to-cyan-500 hover:from-primary-600 hover:to-cyan-600 text-white hover:scale-105'
+                } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
                 {loading ? (
                 <div className="flex items-center justify-center space-x-2">
                     <LoadingSpinner size="small" text="" />
                     <span>Signing in...</span>
+                </div>
+                ) : countdown > 0 ? (
+                <div className="flex items-center justify-center space-x-2">
+                    <span className="text-lg">⏰</span>
+                    <span>Try again in {formatCountdown(countdown)}</span>
                 </div>
                 ) : (
                 'Sign In'
