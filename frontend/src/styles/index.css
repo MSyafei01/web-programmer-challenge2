@@ -28,19 +28,37 @@
     }
     }
 
+    /* Tambahkan keyframes untuk gradient animation */
+    @keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+    }
+
     /* Custom scrollbar */
     ::-webkit-scrollbar {
     width: 6px;
     }
 
     ::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-800;
+    background: theme('colors.gray.100');
+    }
+
+    .dark ::-webkit-scrollbar-track {
+    background: theme('colors.gray.800');
     }
 
     ::-webkit-scrollbar-thumb {
-    @apply bg-primary-500 rounded-full;
+    background: theme('colors.primary.500');
+    border-radius: 9999px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary-600;
+    background: theme('colors.primary.600');
     }
