@@ -49,6 +49,7 @@
 
     const login = async (email, password) => {
         try {
+
         setLoading(true);
         console.log('🔐 Attempting login...', { email });
         
@@ -64,9 +65,11 @@
             setUser(response.data.user);
             return { success: true, data: response.data };
         }
+
         } catch (error) {
         console.error('❌ Login error:', error);
         const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
+        
         return { success: false, error: errorMessage };
         } finally {
         setLoading(false);
