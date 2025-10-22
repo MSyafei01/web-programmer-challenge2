@@ -55,7 +55,7 @@ import LoadingSpinner from './LoadingSpinner';
         const [rememberMe, setRememberMe] = useState(false);
         const [errors, setErrors] = useState({});
         const { login, loading } = useAuth();
-        const navigate = useNavigate(); // Tambahkan ini
+        const navigate = useNavigate();
 
         const handleChange = (e) => {
             const { name, value } = e.target;
