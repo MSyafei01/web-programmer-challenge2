@@ -55,4 +55,3 @@ router.use(loginRateLimit());
             error: 'Account temporarily locked due to too many failed attempts'
         });
         }
-
