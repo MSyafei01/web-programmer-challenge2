@@ -57,6 +57,7 @@ import LoadingSpinner from './LoadingSpinner';
         const { login, loading } = useAuth();
         const navigate = useNavigate();
 
+        
         const handleChange = (e) => {
             const { name, value } = e.target;
             setFormData(prev => ({
@@ -71,6 +72,7 @@ import LoadingSpinner from './LoadingSpinner';
             }));
             }
         };
+
 
         const validateForm = () => {
             const newErrors = {};
@@ -92,6 +94,7 @@ import LoadingSpinner from './LoadingSpinner';
             setErrors(newErrors);
             return Object.keys(newErrors).length === 0;
         };
+
 
         const handleSubmit = async (e) => {
             e.preventDefault();
@@ -116,7 +119,7 @@ import LoadingSpinner from './LoadingSpinner';
         };
 
 
-        
+
     return (
         <div className="w-full max-w-md">
         <div className="glass-effect rounded-2xl p-8 cyber-glow">
