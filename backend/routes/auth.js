@@ -88,6 +88,23 @@ router.use(loginRateLimit());
             [user.id]
         );
 
+        // Cek apakah sekarang terkunci setelah attempt ini
+        const [updatedUser] = await db.execute(
+            'SELECT login_attempts FROM users WHERE id = ?',
+            [user.id]
+        );
+
+        if (updatedUser[0].login_attempts >= 5) {
+            return res.status(429).json({
+            error: 'Account temporarily locked.',
+            retryAfter: 60, // 60 detik
+            message: 'Too many failed attempts. Try again in 60 seconds.'
+            });
+        }        
+
+
+
+
         return res.status(401).json({ 
             error: 'Invalid email/username or password' 
         });
