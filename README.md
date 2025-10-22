@@ -22,13 +22,13 @@
 📸 Application Screenshots
 <div align="center">
 🎨 Login Page - Light Mode
-https://./screenshots/login-light.jpg
+(https://./screenshots/login-light.jpg)
 
 🌙 Mobile Dashboard Page - Dark Mode
-https://./screenshots/login-dark.jpg
+(https://./screenshots/login-dark.jpg)
 
 📱 Mobile Responsive Design
-https://./screenshots/mobile-view.jpg
+(https://./screenshots/mobile-view.jpg)
 
 🔐 Password Strength Validation
 (https://./screenshots/dashboard.jpg)
