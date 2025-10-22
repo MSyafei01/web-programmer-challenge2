@@ -106,7 +106,8 @@ router.use(loginRateLimit());
 
 
         return res.status(401).json({ 
-            error: 'Invalid email/username or password' 
+            error: 'Invalid email/username or password',
+            attemptsRemaining: 5 - updatedUser[0].login_attempts
         });
         }
 
