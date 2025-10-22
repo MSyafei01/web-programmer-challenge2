@@ -1,4 +1,5 @@
     import React, { createContext, useContext, useState, useEffect } from 'react';
+    import axios from 'axios';
 
     const AuthContext = createContext();
 
@@ -15,22 +16,21 @@
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // Configure axios
+    axios.defaults.withCredentials = true;
+
     useEffect(() => {
         checkAuth();
     }, []);
 
     const checkAuth = async () => {
         try {
-        // Simulasi check authentication
+        // Untuk sementara, kita simulasikan dulu
+        // Nanti akan diganti dengan API call ke backend
         const token = localStorage.getItem('auth_token');
         if (token) {
             setIsAuthenticated(true);
-            setUser({ 
-            id: 1, 
-            username: 'admin', 
-            email: 'admin@javisteknologi.com',
-            role: 'administrator' 
-            });
+            setUser({ username: 'admin', email: 'admin@javisteknologi.com' });
         }
         } catch (error) {
         console.error('Auth check failed:', error);
