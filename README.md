@@ -24,17 +24,17 @@
 🎨 Login Page - Light Mode
 https://./screenshots/login-light.jpg
 
-🌙 Login Page - Dark Mode
+🌙 Mobile Dashboard Page - Dark Mode
 https://./screenshots/login-dark.jpg
 
 📱 Mobile Responsive Design
 https://./screenshots/mobile-view.jpg
 
 🔐 Password Strength Validation
-https://./screenshots/password-strength.jpg
+(https://./screenshots/dashboard.jpg)
 
 🛡️ Protected Dashboard
-https://./screenshots/dashboard.jpg
+(https://./screenshots/dashboard.jpg)
 
 <div align="center">
 
