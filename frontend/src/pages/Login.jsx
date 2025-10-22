@@ -1,6 +1,12 @@
     import React from 'react';
     import LoginForm from '../components/LoginForm';
     import ThemeToggle from '../components/ThemeToggle';
+    
+    
+    import ParticlesBackground from '../components/ParticlesBackground';
+
+// Di dalam component Login, tambahkan setelah background elements:
+<ParticlesBackground /> 
 
     const Login = () => {
     return (
