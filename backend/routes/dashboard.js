@@ -69,3 +69,18 @@ import { getDB } from '../config/database.js';
             error: 'User not found'
         });
         }
+
+        res.json({
+        success: true,
+        user: users[0]
+        });
+
+    } catch (error) {
+        console.error('Profile error:', error);
+        res.status(500).json({
+        error: 'Failed to load profile'
+        });
+    }
+    });
+
+    export default router;
