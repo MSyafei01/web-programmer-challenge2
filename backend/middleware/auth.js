@@ -1,6 +1,6 @@
     import jwt from 'jsonwebtoken';
 
-    // JWT Authentication Middleware
+    // JWT Authentication Middleware (tetap sama)
     export const authenticateToken = async (req, res, next) => {
     try {
         const token = req.cookies.token;
@@ -11,10 +11,7 @@
         });
         }
 
-        // Verify JWT token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        // Add user info to request
         req.user = decoded;
         next();
     } catch (error) {
@@ -37,10 +34,10 @@
     }
     };
 
-    // Rate limiting middleware for login attempts - UPDATED to 1 MINUTE
+    // Rate limiting middleware dengan countdown timer
     export const loginRateLimit = () => {
     const attempts = new Map();
-    const WINDOW_MS = 1 * 60 * 1000; // ⬅️ UBAH: 1 menit (dari 15 menit)
+    const WINDOW_MS = 1 * 60 * 1000; // 1 menit
     const MAX_ATTEMPTS = 5;
 
     return (req, res, next) => {
@@ -58,8 +55,14 @@
 
         // Check if exceeded max attempts
         if (ipAttempts.length >= MAX_ATTEMPTS) {
+        const oldestAttempt = Math.min(...ipAttempts);
+        const timeElapsed = now - oldestAttempt;
+        const timeRemaining = Math.ceil((WINDOW_MS - timeElapsed) / 1000); // Hitung detik tersisa
+        
         return res.status(429).json({
-            error: 'Too many login attempts. Please try again in 1 minute.' // ⬅️ UPDATE pesan
+            error: 'Too many login attempts.',
+            retryAfter: timeRemaining,
+            message: `Please try again in ${timeRemaining} seconds.`
         });
         }
 
