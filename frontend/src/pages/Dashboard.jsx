@@ -1,22 +1,20 @@
-    import React from 'react';
+    import React, { useState, useEffect } from 'react';
     import { useAuth } from '../context/AuthContext';
     import ThemeToggle from '../components/ThemeToggle';
-    import React, { useState, useEffect } from 'react';
+    
 
     const Dashboard = () => {
+        const [currentTime, setCurrentTime] = useState(new Date());
 
+        useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
 
-    const [currentTime, setCurrentTime] = useState(new Date());
+        return () => clearInterval(timer);
+        }, []);
 
-    useEffect(() => {
-    const timer = setInterval(() => {
-        setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-    }, []);
     const { user, logout } = useAuth();
-
 
     const handleLogout = () => {
         logout();
