@@ -37,15 +37,19 @@
     // Database Connection
     connectDB();
 
-    // Rate Limiting (Applied to all routes)
-    app.use('/api/', (req, res, next) => {
-    // Basic rate limiting - will be enhanced in auth routes
+    // Debug middleware - log semua request
+    app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
     next();
     });
 
-    // Routes
+    // Routes dengan debug
+    console.log('Setting up routes...');
     app.use('/api/auth', authRoutes);
+    console.log('✅ Auth routes mounted at /api/auth');
+
     app.use('/api/dashboard', dashboardRoutes);
+    console.log('✅ Dashboard routes mounted at /api/dashboard');
 
     // Health Check
     app.get('/api/health', (req, res) => {
@@ -62,15 +66,28 @@
     res.json({
         message: 'Welcome to Web Programmer Challenge API',
         version: '1.0.0',
-        documentation: '/api/health'
+        endpoints: {
+        health: '/api/health',
+        login: '/api/auth/login',
+        dashboard: '/api/dashboard'
+        }
     });
     });
 
-    // 404 Handler
+    // 404 Handler dengan detail routes
     app.use('*', (req, res) => {
+    console.log(`404 - Route not found: ${req.originalUrl}`);
     res.status(404).json({
         error: 'Route not found',
-        path: req.originalUrl
+        path: req.originalUrl,
+        availableRoutes: [
+        'GET  /',
+        'GET  /api/health',
+        'POST /api/auth/login',
+        'POST /api/auth/logout',
+        'GET  /api/auth/verify',
+        'GET  /api/dashboard'
+        ]
     });
     });
 
@@ -91,4 +108,5 @@
     console.log(`🚀 Server running on http://${HOST}:${PORT}`);
     console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🔗 Health check: http://${HOST}:${PORT}/api/health`);
+    console.log(`🔐 Login: http://${HOST}:${PORT}/api/auth/login`);
     });
