@@ -57,7 +57,7 @@ import LoadingSpinner from './LoadingSpinner';
         const { login, loading } = useAuth();
         const navigate = useNavigate();
 
-        
+
         const handleChange = (e) => {
             const { name, value } = e.target;
             setFormData(prev => ({
@@ -220,34 +220,6 @@ import LoadingSpinner from './LoadingSpinner';
                 className="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 font-medium"
                 >
                 Forgot password?
-                </button>
-            </div>
-
-            {/* Social Login Divider */}
-            <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">Or continue with</span>
-                </div>
-            </div>
-
-            {/* Social Login Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-                <button
-                type="button"
-                className="flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
-                >
-                <span className="text-lg mr-2">🔐</span>
-                SSO
-                </button>
-                <button
-                type="button"
-                className="flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
-                >
-                <span className="text-lg mr-2">👤</span>
-                LDAP
                 </button>
             </div>
 
