@@ -95,7 +95,7 @@ router.use(loginRateLimit());
         sameSite: 'strict',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
         });
-        
+
         // Return user data (without password)
         const userResponse = {
         id: user.id,
@@ -140,3 +140,33 @@ router.use(loginRateLimit());
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            
+        // Get fresh user data from database
+        const db = getDB();
+        const [users] = await db.execute(
+        'SELECT id, email, username, role FROM users WHERE id = ? AND is_active = TRUE',
+        [decoded.userId]
+        );
+
+        if (users.length === 0) {
+        res.clearCookie('token');
+        return res.json({ 
+            authenticated: false 
+        });
+        }
+
+        res.json({
+        authenticated: true,
+        user: users[0]
+        });
+
+    } catch (error) {
+        res.clearCookie('token');
+        res.json({ 
+        authenticated: false 
+        });
+    }
+    });
+
+    export default router;
