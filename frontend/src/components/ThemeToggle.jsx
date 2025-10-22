@@ -4,6 +4,7 @@
     const [darkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
+        // Check system preference or saved theme
         const isDark = localStorage.getItem('theme') === 'dark' || 
         (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
         
@@ -30,18 +31,18 @@
     return (
         <button
         onClick={toggleTheme}
-        className="p-2 sm:p-3 rounded-xl bg-white/10 dark:bg-gray-800/50 backdrop-blur-md border border-white/20 dark:border-gray-700 hover:bg-white/20 dark:hover:bg-gray-700/50 transition-all duration-300 hover:scale-105 active:scale-95"
+        className="p-3 rounded-xl bg-white/10 dark:bg-gray-800/50 backdrop-blur-md border border-white/20 dark:border-gray-700 hover:bg-white/20 dark:hover:bg-gray-700/50 transition-all duration-300 hover:scale-105"
         aria-label="Toggle theme"
         >
         {darkMode ? (
-            <div className="flex items-center space-x-1 sm:space-x-2">
-            <span className="text-lg sm:text-xl">🌙</span>
-            <span className="text-xs sm:text-sm font-medium text-white hidden sm:block">Dark</span>
+            <div className="flex items-center space-x-2">
+            <span className="text-xl">🌙</span>
+            <span className="text-sm font-medium text-white">Dark</span>
             </div>
         ) : (
-            <div className="flex items-center space-x-1 sm:space-x-2">
-            <span className="text-lg sm:text-xl">☀️</span>
-            <span className="text-xs sm:text-sm font-medium text-gray-800 hidden sm:block">Light</span>
+            <div className="flex items-center space-x-2">
+            <span className="text-xl">☀️</span>
+            <span className="text-sm font-medium text-gray-800">Light</span>
             </div>
         )}
         </button>
