@@ -55,3 +55,43 @@ router.use(loginRateLimit());
             error: 'Account temporarily locked due to too many failed attempts'
         });
         }
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+        // Increment login attempts
+        await db.execute(
+            'UPDATE users SET login_attempts = login_attempts + 1 WHERE id = ?',
+            [user.id]
+        );
+
+        return res.status(401).json({ 
+            error: 'Invalid email/username or password' 
+        });
+        }
+
+        // Reset login attempts on successful login
+        await db.execute(
+        'UPDATE users SET login_attempts = 0, last_login = CURRENT_TIMESTAMP WHERE id = ?',
+        [user.id]
+        );
+
+        // Generate JWT token
+        const token = jwt.sign(
+        { 
+            userId: user.id, 
+            email: user.email, 
+            username: user.username,
+            role: user.role 
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+        );
+
+        // Set HTTP-only cookie
+        res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
