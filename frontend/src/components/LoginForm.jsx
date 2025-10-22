@@ -46,68 +46,74 @@ import LoadingSpinner from './LoadingSpinner';
 
 
 
-    const LoginForm = () => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
-    const [showPassword, setShowPassword] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false);
-    const [errors, setErrors] = useState({});
-    const { login, loading } = useAuth();
-    const navigate = useNavigate();
+        const LoginForm = () => {
+        const [formData, setFormData] = useState({
+            email: '',
+            password: ''
+        });
+        const [showPassword, setShowPassword] = useState(false);
+        const [rememberMe, setRememberMe] = useState(false);
+        const [errors, setErrors] = useState({});
+        const { login, loading } = useAuth();
+        const navigate = useNavigate(); // Tambahkan ini
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-        ...prev,
-        [name]: value
-        }));
-        
-        // Clear error when user starts typing
-        if (errors[name]) {
-        setErrors(prev => ({
+        const handleChange = (e) => {
+            const { name, value } = e.target;
+            setFormData(prev => ({
             ...prev,
-            [name]: ''
-        }));
-        }
-    };
+            [name]: value
+            }));
+            
+            if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+            }
+        };
 
-    const validateForm = () => {
-        const newErrors = {};
+        const validateForm = () => {
+            const newErrors = {};
 
-        if (!formData.email.trim()) {
-        newErrors.email = 'Email or username is required';
-        }
+            if (!formData.email.trim()) {
+            newErrors.email = 'Email or username is required';
+            }
 
-        if (!formData.password) {
-        newErrors.password = 'Password is required';
-        } else if (formData.password.length < 6) {
-        newErrors.password = 'Password must be at least 6 characters';
-        }
+            if (!formData.password) {
+            newErrors.password = 'Password is required';
+            } else if (formData.password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters';
+            }
 
-        // Email format validation (only if it contains @)
-        if (formData.email.includes('@') && !/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = 'Please enter a valid email address';
-        }
+            if (formData.email.includes('@') && !/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Please enter a valid email address';
+            }
 
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+        };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        if (!validateForm()) {
-        return;
-        }
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            console.log('handleSubmit - Form submitted');
+            
+            if (!validateForm()) {
+            console.log('handleSubmit - Form validation failed');
+            return;
+            }
 
-        const result = await login(formData.email, formData.password);
-        
-        if (!result.success) {
-        setErrors({ general: result.error });
-        }
-    };
+            const result = await login(formData.email, formData.password);
+            console.log('handleSubmit - Login result:', result);
+            
+            if (result.success) {
+            console.log('handleSubmit - Login successful, navigating to dashboard');
+            // Redirect ke dashboard setelah login berhasil
+            navigate('/dashboard');
+            } else {
+            console.log('handleSubmit - Login failed:', result.error);
+            setErrors({ general: result.error });
+            }
+        };
 
     return (
         <div className="w-full max-w-md">
