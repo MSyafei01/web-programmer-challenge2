@@ -39,3 +39,33 @@ import { getDB } from '../config/database.js';
             { name: 'Help & Support', icon: '❓', available: true }
         ]
         };
+
+        res.json({
+        success: true,
+        data: dashboardData
+        });
+
+    } catch (error) {
+        console.error('Dashboard error:', error);
+        res.status(500).json({
+        error: 'Failed to load dashboard data'
+        });
+    }
+    });
+
+    // Get user profile
+    router.get('/profile', async (req, res) => {
+    try {
+        const db = getDB();
+        
+        const [users] = await db.execute(
+        `SELECT id, email, username, role, created_at, last_login 
+        FROM users WHERE id = ?`,
+        [req.user.userId]
+        );
+
+        if (users.length === 0) {
+        return res.status(404).json({
+            error: 'User not found'
+        });
+        }
