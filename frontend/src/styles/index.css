@@ -62,3 +62,27 @@
     ::-webkit-scrollbar-thumb:hover {
     background: theme('colors.primary.600');
     }
+
+    /* Countdown animation */
+    .countdown-timer {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(45deg, #f59e0b, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: pulse 1s infinite;
+    }
+
+    @keyframes countdown-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+    }
+
+    .countdown-timer {
+    animation: countdown-pulse 1s ease-in-out infinite;
+    }
+
+    /* Progress bar animation */
+    .progress-bar {
+    transition: width 1s linear;
+    }
