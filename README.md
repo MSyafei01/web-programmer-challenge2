@@ -23,19 +23,19 @@
 <div align="center">
 🎨 Login Page - Light Mode
 
-![LoginPage] (https://drive.google.com/file/d/1CSJ73oy-PXZD_p0RwqohNxn1PKWOFjkR/view?usp=sharing)
+(https://drive.google.com/file/d/1CSJ73oy-PXZD_p0RwqohNxn1PKWOFjkR/view?usp=sharing)
 
 🌙 Mobile Dashboard Page - Dark Mode
-(https://./screenshots/login-dark.jpg)
+(https://drive.google.com/file/d/1hgXOURglTH97xEzf55Nr34Is9raaIc3j/view?usp=drive_link)
 
 📱 Mobile Responsive Design
-(https://./screenshots/mobile-view.jpg)
+(https://drive.google.com/file/d/1ENk5NSvuYt0aYk2J59CEWCsSRn9e6iKf/view?usp=drive_link)
 
 🔐 Password Strength Validation
-(https://./screenshots/dashboard.jpg)
+(https://drive.google.com/file/d/19ELOuq0hZW_UboLSqYjfDocG-EYhKodC/view?usp=drive_linkg)
 
 🛡️ Protected Dashboard
-(https://./screenshots/dashboard.jpg)
+(https://drive.google.com/file/d/10F3Ehh5x2d7Czfa9_fkRtB-q_wfi-UMu/view?usp=drive_linkg)
 
 <div align="center">
 
