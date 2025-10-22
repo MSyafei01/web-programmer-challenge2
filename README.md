@@ -3,7 +3,7 @@
 ## 🌐 Live Demo
 
 ### Frontend (Production)
-🔗 **Live Application:** [web-programmer-challenge2.netlify.app](https://web-programmer-challenge2.netlify.app)
+🔗 **Live Application:** [http://localhost:3000/](http://localhost:3000/)
 
 ### Demo Credentials
 - **Email:** `admin@javisteknologi.com`
