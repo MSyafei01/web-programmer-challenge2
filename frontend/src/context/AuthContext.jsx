@@ -68,6 +68,18 @@
 
         } catch (error) {
         console.error('❌ Login error:', error);
+                // Handle countdown timer dari backend
+        if (error.response?.status === 429) {
+        const retryAfter = error.response.data.retryAfter;
+        const message = error.response.data.message || `Too many attempts. Try again in ${retryAfter} seconds.`;
+        
+        return { 
+            success: false, 
+            error: message,
+            retryAfter: retryAfter,
+            isRateLimited: true
+        };
+        }
         const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
         
         return { success: false, error: errorMessage };
