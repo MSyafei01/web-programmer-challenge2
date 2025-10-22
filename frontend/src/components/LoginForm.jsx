@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from './LoadingSpinner';
 
+
     // Password Strength Component
     const PasswordStrength = ({ password }) => {
     const getStrength = (pass) => {
@@ -43,6 +44,8 @@ import LoadingSpinner from './LoadingSpinner';
     );
     };
 
+
+
     const LoginForm = () => {
     const [formData, setFormData] = useState({
         email: '',
@@ -52,6 +55,7 @@ import LoadingSpinner from './LoadingSpinner';
     const [rememberMe, setRememberMe] = useState(false);
     const [errors, setErrors] = useState({});
     const { login, loading } = useAuth();
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
