@@ -6,7 +6,7 @@
     server: {
         port: 3000,
         host: true,
-        // Hapus proxy di production, karena kita akan menggunakan environment variable
+        
         proxy: process.env.NODE_ENV === 'development' ? {
         '/api': {
             target: 'http://localhost:5000',
