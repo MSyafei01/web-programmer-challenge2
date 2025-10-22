@@ -23,7 +23,7 @@
 <div align="center">
 🎨 Login Page - Light Mode
 
-![LoginPage] (https://./screenshots/login-light.jpg)
+![LoginPage] (https://drive.google.com/file/d/1CSJ73oy-PXZD_p0RwqohNxn1PKWOFjkR/view?usp=sharing)
 
 🌙 Mobile Dashboard Page - Dark Mode
 (https://./screenshots/login-dark.jpg)
