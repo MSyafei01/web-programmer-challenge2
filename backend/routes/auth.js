@@ -84,7 +84,7 @@ router.use(loginRateLimit());
         if (!isPasswordValid) {
         // Increment login attempts
         await db.execute(
-            'UPDATE users SET login_attempts = login_attempts + 1 WHERE id = ?',
+            'UPDATE users SET login_attempts = login_attempts + 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
             [user.id]
         );
 
