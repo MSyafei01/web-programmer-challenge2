@@ -56,8 +56,9 @@ router.use(loginRateLimit());
             'SELECT updated_at FROM users WHERE id = ?',
             [user.id]
         );
+        }
 
-
+        
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
