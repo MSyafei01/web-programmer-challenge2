@@ -117,6 +117,7 @@ router.use(loginRateLimit());
         [user.id]
         );
 
+        
         // Generate JWT token
         const token = jwt.sign(
         { 
@@ -159,6 +160,7 @@ router.use(loginRateLimit());
         });
     }
     });
+    
 
     // Logout endpoint
     router.post('/logout', (req, res) => {
