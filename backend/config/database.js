@@ -1,5 +1,7 @@
     import mysql from 'mysql2/promise';
     import bcrypt from 'bcryptjs';
+    import fs from 'fs';
+    import path from 'path';
 
     // Database configuration
     const dbConfig = {
