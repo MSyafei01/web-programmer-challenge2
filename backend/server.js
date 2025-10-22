@@ -21,9 +21,13 @@
     crossOriginResourcePolicy: { policy: "cross-origin" }
     }));
 
-    // CORS Configuration
+    // CORS Configuration - UPDATED FOR PRODUCTION
     app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: [
+        'http://localhost:3000',
+        'https://*.up.railway.app', // Railway domains
+        process.env.FRONTEND_URL
+    ].filter(Boolean),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -37,11 +41,13 @@
     // Database Connection
     connectDB();
 
-    // Debug middleware - log semua request
+    // Debug middleware - log semua request (disable di production untuk performance)
+    if (process.env.NODE_ENV !== 'production') {
     app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
-    next();
+        console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
+        next();
     });
+    }
 
     // Routes dengan debug
     console.log('Setting up routes...');
@@ -57,26 +63,31 @@
         status: 'OK',
         message: 'Web Programmer Challenge API is running',
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        version: '1.0.0'
     });
     });
 
     // Root endpoint
     app.get('/', (req, res) => {
     res.json({
-        message: 'Welcome to Web Programmer Challenge API',
+        message: 'Welcome to Web Programmer Challenge API - PT. Javis Teknologi Albarokah',
         version: '1.0.0',
         endpoints: {
         health: '/api/health',
         login: '/api/auth/login',
-        dashboard: '/api/dashboard'
+        dashboard: '/api/dashboard',
+        documentation: 'https://github.com/your-repo/docs'
         }
     });
     });
 
     // 404 Handler dengan detail routes
     app.use('*', (req, res) => {
-    console.log(`404 - Route not found: ${req.originalUrl}`);
+    if (process.env.NODE_ENV !== 'production') {
+        console.log(`404 - Route not found: ${req.originalUrl}`);
+    }
+    
     res.status(404).json({
         error: 'Route not found',
         path: req.originalUrl,
@@ -94,9 +105,15 @@
     // Global Error Handler
     app.use((error, req, res, next) => {
     console.error('Global Error Handler:', error);
+    
+    // Jangan expose detailed error di production
+    const errorMessage = process.env.NODE_ENV === 'production' 
+        ? 'Something went wrong' 
+        : error.message;
+        
     res.status(500).json({
         error: 'Internal server error',
-        message: process.env.NODE_ENV === 'production' ? 'Something went wrong' : error.message
+        message: errorMessage
     });
     });
 
@@ -109,4 +126,10 @@
     console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🔗 Health check: http://${HOST}:${PORT}/api/health`);
     console.log(`🔐 Login: http://${HOST}:${PORT}/api/auth/login`);
+    
+    // Additional info untuk production
+    if (process.env.NODE_ENV === 'production') {
+        console.log('✅ Production mode enabled');
+        console.log('🔒 Security features active');
+    }
     });
