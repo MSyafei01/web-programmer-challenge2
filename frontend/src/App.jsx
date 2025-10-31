@@ -35,8 +35,10 @@
                 </ProtectedRoute>
                 } 
             />
+            <Route path="/users" element={<UserManagement />} />
             <Route path="/" element={<Navigate to="/dashboard" />} />
             </Routes>
+            
         </Router>
         </AuthProvider>
     );
