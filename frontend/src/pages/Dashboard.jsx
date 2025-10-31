@@ -182,6 +182,14 @@
                 <button className="p-3 sm:p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-xl transition-colors duration-200 font-medium text-sm sm:text-base">
                     Support
                 </button>
+                {user?.role === 'admin' && (
+                <button 
+                    onClick={() => window.location.href = '/users'}
+                    className="p-3 sm:p-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl transition-colors duration-200 font-medium text-sm sm:text-base"
+                >
+                    Manage Users
+                </button>
+                )}
                 </div>
             </div>
             </div>
@@ -189,5 +197,7 @@
         </div>
     );
     };
+
+
 
     export default Dashboard;

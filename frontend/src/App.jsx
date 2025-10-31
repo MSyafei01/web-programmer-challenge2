@@ -4,6 +4,8 @@
     import Login from './pages/Login';
     import Dashboard from './pages/Dashboard';
     import LoadingSpinner from './components/LoadingSpinner';
+    import UserManagement from './pages/UserManagement';
+
 
     const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
